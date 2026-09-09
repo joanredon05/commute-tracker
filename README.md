@@ -1,6 +1,6 @@
 # Commute Tracker
 
-<img src="docs/calendar.png" width="280" alt="The calendar screen with days filled in each person's colour"> <img src="docs/summary.png" width="280" alt="The summary screen showing rides and balance per person">
+<img src="docs/calendar.png" width="180" alt="The calendar screen with days filled in each person's colour"> <img src="docs/summary.png" width="180" alt="The summary screen showing rides and balance per person">
 
 A single-file web app for tracking who drove you to work, so you know exactly what you owe at the end of the month.
 
