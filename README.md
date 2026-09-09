@@ -65,7 +65,6 @@ Vanilla JavaScript, no dependencies, no build tooling, around 950 lines in one f
 - Entrance animations only play when the content genuinely changes, such as switching month or tab. In-place updates like marking someone paid redraw silently, so a single tap never replays the whole screen.
 - Dark mode only, system font, tabular figures so numbers do not shift between months. Reduced-motion preferences are respected.
 
-Developed with AI assistance.
 
 ## Hosting
 
