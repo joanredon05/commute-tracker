@@ -14,7 +14,7 @@ So the point of the app is not the arithmetic. It is that logging a day is two t
 
 ## Using it
 
-**Every day.** Open it from the home screen icon, tap today, pick who drove you. Tap the day again to change or clear it.
+**Every day.** Open it from the home screen icon, tap today, pick who drove you. Tap the day again to change or clear it. If you went one way with someone and came back another, use *Split the day*.
 
 **End of the month.** Open Summary. Each person shows their ride count and what they are owed. Pay them, hit *Mark paid*, and the amount is struck through. If you move into a new month with something still unpaid, a banner appears at the top with the breakdown.
 
@@ -30,9 +30,17 @@ Nothing about the people is hardcoded, which is why the source can be public whi
 
 ## Screens
 
-**Calendar.** The month in large type, how many days are logged, and the grid. Marked days are filled with that person's colour. Tapping a day opens a bottom sheet with the options, which you can flick down to dismiss.
+**Calendar.** The month in large type, how many days are logged, and the grid. Marked days are filled with that person's colour, and split days are split diagonally between two of them. Tapping a day opens a bottom sheet with the options, which you can flick down to dismiss.
 
-**Summary.** The month total, a row per person with rides and balance, a bus row, and what is still owed. Two collapsible panels sit underneath: *Year*, which charts all twelve months as bars scaled to the most expensive one, and *Settings*, which holds people, prices and data.
+**Summary.** The month total, a row per person with rides and balance, a bus row, and what is still owed. Two collapsible panels sit underneath: *Year* and *Settings*, which holds people, prices and data.
+
+**Year.** All twelve months as columns scaled to the most expensive one, each stacked by colour so you can see who the money went to, not just how much. The annual total sits above it, per-person and bus subtotals below, and the busiest month at the bottom. Tapping a column jumps the app to that month.
+
+## Split days
+
+Some days one person drives you in and you get home another way. *Split the day*, under the three options in the day sheet, lets you pick a morning and an afternoon separately. Each leg counts as half a ride at half the price, and the button shows what the day will cost before you save it.
+
+Picking the same option for both halves stores it as an ordinary full day. Amounts show decimals only when a split produces them, so whole numbers stay clean.
 
 ## Where the data lives
 
@@ -56,9 +64,10 @@ Drop a 180x180 `icon.png` next to `index.html` for a custom home screen icon.
 
 ## How it is built
 
-Vanilla JavaScript, no dependencies, no build tooling, around 950 lines in one file including the CSS.
+Vanilla JavaScript, no dependencies, no build tooling, around 1,050 lines in one file including the CSS.
 
 - Persistence through `localStorage`, with detection for contexts that block it.
+- A day is stored either as a single value or as a `{am, pm}` pair, and everything downstream reads it through one function that flattens both into weighted legs. Splits therefore needed no change to storage, totals or backups.
 - Image handling with `FileReader` and `canvas`, resized client-side to stay well under the storage quota.
 - Dialogs are built in-app rather than using `confirm()` and `prompt()`, which are blocked in standalone and embedded contexts.
 - Backup export uses the Web Share API with a file when available, falling back to a download link.
@@ -69,4 +78,3 @@ Vanilla JavaScript, no dependencies, no build tooling, around 950 lines in one f
 ## Hosting
 
 Any static host. For GitHub Pages, keep `index.html` at the repository root and deploy from `main` under Settings, Pages.
-

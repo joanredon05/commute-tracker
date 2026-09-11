@@ -76,6 +76,7 @@
   .day.today::after{content:'';position:absolute;bottom:5px;left:50%;transform:translateX(-50%);
     width:4px;height:4px;border-radius:50%;background:var(--fg-3);}
   .day.marked{font-weight:650;}
+  .day.split{color:#fff;}
   .day.marked.today::after{background:currentColor;opacity:.8;}
   .day.pop{animation:pop .55s var(--spring);}
   @keyframes pop{0%{transform:scale(.72);}45%{transform:scale(1.14);}70%{transform:scale(.97);}100%{transform:scale(1);}}
@@ -186,27 +187,46 @@
     border:.5px solid var(--hair);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);
     box-shadow:inset 0 .5px 0 rgba(255,255,255,.1);}
 
-  .yhead{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 10px;}
-  .yhead .yr{font-size:22px;font-weight:700;letter-spacing:-.7px;font-variant-numeric:tabular-nums;}
-  .yarrows{display:flex;gap:8px;}
-  .ymrow{display:flex;align-items:center;gap:11px;padding:7px 18px;}
-  .ymrow .mn{width:30px;font-size:12.5px;font-weight:600;color:var(--fg-2);flex-shrink:0;}
-  .ymrow.empty .mn{color:var(--fg-3);}
-  .ymrow .track{flex:1;height:9px;border-radius:6px;background:rgba(255,255,255,.06);overflow:hidden;}
-  .ymrow .fill{height:100%;border-radius:6px;background:linear-gradient(90deg,rgba(255,255,255,.55),rgba(255,255,255,.28));
-    transform-origin:left;animation:barGrow .7s var(--ease) both;}
-  @keyframes barGrow{from{transform:scaleX(0);}to{transform:scaleX(1);}}
-  .ymrow .vv{width:66px;text-align:right;font-size:12.5px;font-variant-numeric:tabular-nums;color:var(--fg-2);flex-shrink:0;}
-  .ymrow.cur .mn,.ymrow.cur .vv{color:var(--fg);}
-  .ytot{margin:12px 14px 16px;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.055);
-    display:flex;align-items:center;justify-content:space-between;}
+  .yhead{display:flex;align-items:flex-end;justify-content:space-between;padding:18px 18px 4px;}
+  .yhead .ytitle{font-size:32px;font-weight:700;letter-spacing:-1.2px;line-height:1;font-variant-numeric:tabular-nums;}
+  .yhead .ysub{font-size:12.5px;color:var(--fg-2);margin-top:5px;}
+  .yarrows{display:flex;gap:8px;padding-bottom:4px;}
+
+  .chartwrap{padding:22px 14px 0;}
+  .chart{display:flex;align-items:flex-end;gap:4px;height:148px;}
+  .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+    height:100%;cursor:pointer;transition:transform .3s var(--spring);}
+  .col:active{transform:scale(.9);}
+  .bar{width:100%;max-width:22px;border-radius:6px;overflow:hidden;display:flex;flex-direction:column-reverse;
+    animation:barRise .75s var(--spring) both;transform-origin:bottom;}
+  @keyframes barRise{from{transform:scaleY(0);opacity:.3;}to{transform:scaleY(1);opacity:1;}}
+  .seg{width:100%;}
+  .stub{width:100%;max-width:22px;height:3px;border-radius:3px;background:rgba(255,255,255,.09);}
+  .mlabels{display:flex;gap:4px;margin-top:10px;}
+  .mlabels div{flex:1;text-align:center;font-size:10px;font-weight:600;color:var(--fg-3);}
+  .mlabels div.cur{color:var(--fg);}
+  .yvalue{height:16px;font-size:9.5px;font-weight:700;color:var(--fg-2);
+    font-variant-numeric:tabular-nums;margin-bottom:5px;opacity:0;transition:opacity .3s;}
+  .col.top .yvalue{opacity:1;}
+
+  .ylegend{display:flex;flex-direction:column;gap:1px;margin:20px 14px 0;
+    border-radius:18px;overflow:hidden;background:rgba(255,255,255,.045);}
+  .ylrow{display:flex;align-items:center;gap:10px;padding:11px 14px;}
+  .ylrow+.ylrow{border-top:.5px solid rgba(255,255,255,.06);}
+  .ylrow .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .ylrow .nm{flex:1;font-size:14px;font-weight:600;letter-spacing:-.2px;}
+  .ylrow .ct{font-size:12.5px;color:var(--fg-3);margin-right:10px;font-variant-numeric:tabular-nums;}
+  .ylrow .vl{font-size:14.5px;font-weight:650;font-variant-numeric:tabular-nums;letter-spacing:-.3px;}
+  .ytot{margin:12px 14px 16px;padding:15px 16px;border-radius:18px;
+    background:linear-gradient(150deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
+    border:.5px solid var(--hair);display:flex;align-items:center;justify-content:space-between;}
   .ytot .l{font-size:14px;font-weight:650;}
   .ytot .s{font-size:12px;color:var(--fg-2);margin-top:2px;}
-  .ytot .b{font-size:22px;font-weight:700;letter-spacing:-.7px;font-variant-numeric:tabular-nums;}
+  .ytot .b{font-size:24px;font-weight:700;letter-spacing:-.8px;font-variant-numeric:tabular-nums;}
 
   /* in-place updates should not replay entrance animations */
   .static .pane,.static .row,.static .cell,.static .total,.static .alert,.static .setinner{animation:none !important;}
-  .static .fill{animation:none !important;}
+  .static .fill,.static .bar{animation:none !important;}
   .empty{text-align:center;color:var(--fg-3);font-size:14px;padding:36px 14px;line-height:1.65;}
 
   /* people editor */
@@ -267,6 +287,32 @@
   .opt-n{flex:1;font-size:16.5px;font-weight:650;letter-spacing:-.35px;}
   .opt-c{font-size:13.5px;color:var(--fg-2);font-variant-numeric:tabular-nums;}
   .opt-k{width:18px;text-align:center;font-size:15px;color:var(--green);}
+  .splitbtn{all:unset;display:flex;align-items:center;justify-content:center;gap:9px;box-sizing:border-box;
+    width:100%;margin-top:9px;padding:13px 0;border-radius:21px;cursor:pointer;
+    background:rgba(255,255,255,.045);border:.5px dashed var(--hair-2);
+    font-size:14.5px;font-weight:650;color:var(--fg-2);letter-spacing:-.2px;
+    transition:transform .3s var(--spring),background .25s,color .25s;
+    opacity:0;transform:translateY(24px) scale(.94);}
+  .sheet.open .splitbtn{animation:optIn .6s var(--spring) forwards;animation-delay:.24s;}
+  .splitbtn:active{transform:scale(.97);}
+  .splitlab{font-size:11.5px;font-weight:700;letter-spacing:.5px;color:var(--fg-3);
+    margin:16px 4px 9px;text-transform:uppercase;}
+  .splitlab:first-child{margin-top:4px;}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;}
+  .chip{display:flex;align-items:center;gap:8px;padding:7px 13px 7px 7px;border-radius:100px;cursor:pointer;
+    background:rgba(255,255,255,.06);border:.5px solid var(--hair);
+    font-size:14.5px;font-weight:600;letter-spacing:-.2px;color:var(--fg-2);
+    transition:transform .3s var(--spring),background .22s,border-color .22s,color .22s;}
+  .chip:active{transform:scale(.94);}
+  .chip.on{background:rgba(255,255,255,.15);border-color:var(--hair-2);color:var(--fg);}
+  .chip .ava,.chip .avaph{width:26px!important;height:26px!important;font-size:11px!important;}
+  .chip .avaph svg{width:15px;height:15px;}
+  .savebtn{all:unset;display:block;text-align:center;box-sizing:border-box;width:100%;
+    margin-top:20px;padding:15px 0;border-radius:21px;cursor:pointer;
+    background:#fff;color:#000;font-size:15.5px;font-weight:700;
+    transition:transform .3s var(--spring),opacity .25s;}
+  .savebtn:active{transform:scale(.97);}
+  .savebtn.off{background:rgba(255,255,255,.09);color:var(--fg-3);}
   .clear{all:unset;display:block;text-align:center;width:100%;box-sizing:border-box;margin-top:11px;padding:14px 0;
     border-radius:21px;background:rgba(255,255,255,.06);border:.5px solid var(--hair);font-size:15.5px;font-weight:650;
     color:var(--red);cursor:pointer;transition:transform .3s var(--spring);}
@@ -369,7 +415,7 @@ const BUS_SVG=`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns
   <path d="M7.4 18v1.9M16.6 18v1.9" stroke="#D9A6FA" stroke-width="1.5" stroke-linecap="round"/>
   <path d="M3.4 9.4v3M20.6 9.4v3" stroke="#D9A6FA" stroke-width="1.4" stroke-linecap="round"/></svg>`;
 
-let S=null, vY, vM, tab='cal', sheetDay=null, justMarked=null, cropTarget=null, saveTimer=null,
+let S=null, vY, vM, tab='cal', sheetDay=null, sheetMode='single', splitAM=null, splitPM=null, justMarked=null, cropTarget=null, saveTimer=null,
     openPanel=null, panelJustOpened=false, animateNext=true, yearY=null;
 /* In-place updates (toggling paid, editing a field, opening settings) re-render
    the same view, so entrance animations are suppressed for those. */
@@ -442,6 +488,20 @@ function toast(msg){
   t.textContent=msg;t.classList.add('show');
   clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2800);
 }
+/* A day is either a single choice (string) or a split {am,pm}, each leg
+   counting as half a ride. legs() flattens both into [who, weight] pairs. */
+function legs(e){
+  if(!e)return[];
+  if(typeof e==='string')return[[e,1]];
+  const out=[];
+  if(e.am)out.push([e.am,0.5]);
+  if(e.pm)out.push([e.pm,0.5]);
+  return out;
+}
+const isSplit=e=>!!e&&typeof e==='object';
+const fmt=n=>Number.isInteger(n)?String(n):String(Math.round(n*100)/100);
+const colorOf=w=>w==='bus'?'#BF5AF2':((person(w)||{}).color||'#8E8E93');
+const labelOf=w=>w==='bus'?'Bus':((person(w)||{}).name||'Unnamed');
 const person=id=>S.people.find(p=>p.id===id)||null;
 const initials=n=>(n||'?').trim().charAt(0).toUpperCase()||'?';
 function avatarHTML(p,size){
@@ -456,9 +516,10 @@ function totals(y,m){
   S.people.forEach(p=>per[p.id]=0);
   for(const k in S.entries){
     if(!k.startsWith(key+'-'))continue;
-    const v=S.entries[k];
-    if(v==='bus')bus++;
-    else if(per.hasOwnProperty(v))per[v]++;
+    legs(S.entries[k]).forEach(([who,w])=>{
+      if(who==='bus')bus+=w;
+      else if(per.hasOwnProperty(who))per[who]+=w;
+    });
   }
   const paid=S.paid[key]||{};
   const rides=Object.values(per).reduce((a,b)=>a+b,0);
@@ -467,21 +528,33 @@ function totals(y,m){
     total:rides*S.rate+bus*S.busPrice};
 }
 function yearStats(y){
-  const months=[];let max=0,total=0,rides=0,buses=0;
+  const months=[],byPerson={};let max=0,total=0,rides=0,buses=0,busKr=0;
+  S.people.forEach(p=>byPerson[p.id]={rides:0,kr:0});
   for(let m=0;m<12;m++){
     const t=totals(y,m);
-    months.push({m,total:t.total,rides:t.rides,bus:t.bus});
+    const seg=S.people.map(p=>({id:p.id,color:p.color,kr:(t.per[p.id]||0)*S.rate}))
+      .filter(s=>s.kr>0);
+    if(t.busKr>0)seg.push({id:'bus',color:'#BF5AF2',kr:t.busKr});
+    months.push({m,total:t.total,seg});
+    S.people.forEach(p=>{
+      byPerson[p.id].rides+=t.per[p.id]||0;
+      byPerson[p.id].kr+=(t.per[p.id]||0)*S.rate;
+    });
     if(t.total>max)max=t.total;
-    total+=t.total;rides+=t.rides;buses+=t.bus;
+    total+=t.total;rides+=t.rides;buses+=t.bus;busKr+=t.busKr;
   }
-  return{months,max,total,rides,buses};
+  return{months,max,total,rides,buses,busKr,byPerson,
+    best:months.reduce((a,b)=>b.total>a.total?b:a,months[0])};
 }
 function pendingBefore(y,m){
   const cur=mk(y,m),out=[];
   [...new Set(Object.keys(S.entries).map(k=>k.slice(0,7)))].sort().forEach(key=>{
     if(key>=cur)return;
     const cnt={},paid=S.paid[key]||{};
-    for(const k in S.entries){if(k.startsWith(key+'-'))cnt[S.entries[k]]=(cnt[S.entries[k]]||0)+1;}
+    for(const k in S.entries){
+      if(!k.startsWith(key+'-'))continue;
+      legs(S.entries[k]).forEach(([who,w])=>{cnt[who]=(cnt[who]||0)+w;});
+    }
     S.people.forEach(p=>{
       if(cnt[p.id]&&!paid[p.id])out.push({who:p.name||'Unnamed',kr:cnt[p.id]*S.rate,lab:M[+key.split('-')[1]-1]});
     });
@@ -493,23 +566,73 @@ function pendingBefore(y,m){
 function openSheet(y,m,d){
   haptic();sheetDay=dk(y,m,d);
   const cur=S.entries[sheetDay];
+  sheetMode=isSplit(cur)?'split':'single';
+  splitAM=isSplit(cur)?cur.am:(typeof cur==='string'?cur:null);
+  splitPM=isSplit(cur)?cur.pm:(typeof cur==='string'?cur:null);
   document.getElementById('shT').textContent=
     new Date(y,m,d).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
-  let html=S.people.map(p=>`
-    <div class="opt ${cur===p.id?'sel':''}" onclick="pick('${p.id}')">
-      ${avatarHTML(p)}<div class="opt-n">${esc(p.name||'Unnamed')}</div>
-      <div class="opt-c">${S.rate} ${esc(S.currency)}</div>
-      <div class="opt-k">${cur===p.id?'✓':''}</div></div>`).join('');
-  if(S.busEnabled){
-    html+=`<div class="opt ${cur==='bus'?'sel':''}" onclick="pick('bus')">
-      <div class="avaph" style="background:rgba(191,90,242,.22);box-shadow:0 0 0 2px rgba(191,90,242,.6)">${BUS_SVG}</div>
-      <div class="opt-n">Bus</div><div class="opt-c">${S.busPrice} ${esc(S.currency)}</div>
-      <div class="opt-k">${cur==='bus'?'✓':''}</div></div>`;
-  }
-  document.getElementById('shOpts').innerHTML=html;
-  document.getElementById('shClear').style.display=cur?'block':'none';
+  renderSheet();
   document.getElementById('scrim').classList.add('open');
   document.getElementById('sheet').classList.add('open');
+}
+function optionList(){
+  const list=S.people.map(p=>({id:p.id,name:p.name||'Unnamed',price:S.rate,avatar:avatarHTML(p)}));
+  if(S.busEnabled)list.push({id:'bus',name:'Bus',price:S.busPrice,
+    avatar:`<div class="avaph" style="background:rgba(191,90,242,.22);box-shadow:0 0 0 2px rgba(191,90,242,.6)">${BUS_SVG}</div>`});
+  return list;
+}
+function renderSheet(){
+  const cur=S.entries[sheetDay];
+  const opts=optionList();
+  const box=document.getElementById('shOpts');
+  const clear=document.getElementById('shClear');
+  const sub=document.getElementById('shS');
+
+  if(sheetMode==='single'){
+    sub.textContent='How did you get to work?';
+    box.innerHTML=opts.map(o=>`
+      <div class="opt ${cur===o.id?'sel':''}" onclick="pick('${o.id}')">
+        ${o.avatar}<div class="opt-n">${esc(o.name)}</div>
+        <div class="opt-c">${fmt(o.price)} ${esc(S.currency)}</div>
+        <div class="opt-k">${cur===o.id?'✓':''}</div></div>`).join('')
+      +`<button class="splitbtn" onclick="setSheetMode('split')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v18M7 8l-4 4 4 4M17 8l4 4-4 4"/></svg>
+          Split the day</button>`;
+    clear.textContent='Clear this day';
+    clear.style.display=cur?'block':'none';
+    clear.onclick=clearDay;
+  }else{
+    sub.textContent='Half a ride each way';
+    const chips=leg=>opts.map(o=>{
+      const sel=(leg==='am'?splitAM:splitPM)===o.id;
+      return `<div class="chip ${sel?'on':''}" onclick="setLeg('${leg}','${o.id}')">
+        ${o.avatar}${esc(o.name)}</div>`;
+    }).join('');
+    const ready=splitAM&&splitPM;
+    box.innerHTML=`<div class="splitlab">Morning</div><div class="chips">${chips('am')}</div>
+      <div class="splitlab">Afternoon</div><div class="chips">${chips('pm')}</div>
+      <button class="savebtn ${ready?'':'off'}" onclick="saveSplit()">
+        ${ready?`Save · ${fmt(splitCost())} ${esc(S.currency)}`:'Pick both halves'}</button>`;
+    clear.textContent='Back';
+    clear.style.display='block';
+    clear.onclick=()=>setSheetMode('single');
+  }
+}
+function setSheetMode(m){sheetMode=m;haptic();renderSheet();}
+function setLeg(leg,id){
+  if(leg==='am')splitAM=id;else splitPM=id;
+  haptic();renderSheet();
+}
+function splitCost(){
+  const price=w=>w==='bus'?S.busPrice:S.rate;
+  return (price(splitAM)+price(splitPM))/2;
+}
+function saveSplit(){
+  if(!splitAM||!splitPM){toast('Pick both halves');return;}
+  S.entries[sheetDay]= splitAM===splitPM ? splitAM : {am:splitAM,pm:splitPM};
+  justMarked=sheetDay;animateNext=false;
+  haptic();save();closeSheet();render();
+  setTimeout(()=>{justMarked=null;},600);
 }
 function closeSheet(){
   document.getElementById('scrim').classList.remove('open');
@@ -578,6 +701,7 @@ function showPanel(which){
   animateNext=false;haptic();render();
 }
 function navYear(d){yearY+=d;animateNext=false;render();}
+function goMonth(y,m){vY=y;vM=m;openPanel=null;haptic();animateNext=true;render();}
 function finishSetup(){
   if(!S.people.some(p=>(p.name||'').trim())){toast('Add at least one name');return;}
   S.setup=true;save();render();
@@ -825,16 +949,20 @@ function render(){
     for(let d=1;d<=nd;d++){
       const k=dk(vY,vM,d), e=S.entries[k], dow=(off+d-1)%7;
       let style='';
-      if(e){
-        const col=e==='bus'?'#BF5AF2':((person(e)||{}).color||'#8E8E93');
+      if(isSplit(e)){
+        const c1=colorOf(e.am),c2=colorOf(e.pm);
+        style=`background:linear-gradient(135deg,${c1}66 0 50%,${c2}66 50% 100%);`+
+              `box-shadow:inset 0 0 0 .5px rgba(255,255,255,.3),0 6px 16px rgba(0,0,0,.3);`;
+      }else if(e){
+        const col=colorOf(e);
         style=`background:linear-gradient(160deg,${col}4d,${col}21);color:${col};`+
               `box-shadow:inset 0 0 0 .5px ${col}73,0 6px 16px ${col}24;`;
       }
-      const cls=[e?'marked':'',dow>=5&&!e?'we':'',k===todayKey?'today':'',k===justMarked?'pop':''].filter(Boolean).join(' ');
+      const cls=[e?'marked':'',isSplit(e)?'split':'',dow>=5&&!e?'we':'',k===todayKey?'today':'',k===justMarked?'pop':''].filter(Boolean).join(' ');
       cells+=`<div class="cell" style="animation-delay:${(0.012*d).toFixed(3)}s">
         <div class="day ${cls}" style="${style}" onclick="openSheet(${vY},${vM},${d})">${d}</div></div>`;
     }
-    const logged=T.rides+T.bus;
+    const logged=Math.round((T.rides+T.bus)*100)/100;
     head=`<div class="mtitle">${M[vM]} <span class="yr">${vY}</span></div>
       <div class="msub">${logged?`${logged} ${logged===1?'day':'days'} logged`:'No days logged yet'}</div>`;
     body=`<div class="card">
@@ -846,7 +974,7 @@ function render(){
       </div></div>`;
   }else{
     head=`<div class="mtitle">${M[vM]} <span class="yr">${vY}</span></div>
-      <div class="amt"><div class="n">${T.total}</div><div class="u">${esc(S.currency)} total</div></div>`;
+      <div class="amt"><div class="n">${fmt(T.total)}</div><div class="u">${esc(S.currency)} total</div></div>`;
     const nothing=!T.rides&&!T.bus;
     body=nothing
       ?`<div class="card"><div class="empty">Nothing logged in ${M[vM]} yet.<br>Go to the calendar and tap a day.</div></div>`
@@ -855,20 +983,20 @@ function render(){
           const n=T.per[p.id]||0, paid=!!T.paid[p.id];
           return `<div class="row">${avatarHTML(p)}
             <div class="rmain"><div class="rname">${esc(p.name||'Unnamed')}</div>
-              <div class="rmeta">${n} ${n===1?'ride':'rides'} · ${S.rate} ${esc(S.currency)} each</div></div>
-            <div class="rright"><div class="ramt ${paid?'done':''}">${n*S.rate} ${esc(S.currency)}</div>
+              <div class="rmeta">${fmt(n)} ${n===1?'ride':'rides'} · ${fmt(S.rate)} ${esc(S.currency)} each</div></div>
+            <div class="rright"><div class="ramt ${paid?'done':''}">${fmt(n*S.rate)} ${esc(S.currency)}</div>
               ${n?`<button class="pill ${paid?'on':''}" onclick="togglePaid('${p.id}')">${paid?'✓ Paid':'Mark paid'}</button>`:''}
             </div></div>`;
         }).join('')}
         ${S.busEnabled?`<div class="row">
           <div class="avaph" style="background:rgba(191,90,242,.2);box-shadow:0 0 0 2px rgba(191,90,242,.6)">${BUS_SVG}</div>
           <div class="rmain"><div class="rname">Bus</div>
-            <div class="rmeta">${T.bus} ${T.bus===1?'ticket':'tickets'} · ${S.busPrice} ${esc(S.currency)} each</div></div>
-          <div class="rright"><div class="ramt">${T.busKr} ${esc(S.currency)}</div></div></div>`:''}
+            <div class="rmeta">${fmt(T.bus)} ${T.bus===1?'ticket':'tickets'} · ${fmt(S.busPrice)} ${esc(S.currency)} each</div></div>
+          <div class="rright"><div class="ramt">${fmt(T.busKr)} ${esc(S.currency)}</div></div></div>`:''}
       </div>
       <div class="total">
-        <div><div class="l">Still owed</div><div class="s">${T.rides} ${T.rides===1?'ride':'rides'} this month</div></div>
-        <div class="b">${T.owed} ${esc(S.currency)}</div>
+        <div><div class="l">Still owed</div><div class="s">${fmt(T.rides)} ${T.rides===1?'ride':'rides'} this month</div></div>
+        <div class="b">${fmt(T.owed)} ${esc(S.currency)}</div>
       </div>`;
 
     body+=`<div class="panelrow">
@@ -880,25 +1008,56 @@ function render(){
 
     if(openPanel==='year'){
       const ys=yearStats(yearY);
+      const H=148;
       body+=`<div class="panelbox"><div class="setinner ${panelJustOpened?'reveal':''}" style="padding:0 0 4px;border-top:none;background:transparent">
-        <div class="yhead"><div class="yr">${yearY}</div>
+        <div class="yhead">
+          <div>
+            <div class="ytitle">${fmt(ys.total)} <span style="font-size:15px;font-weight:600;color:var(--fg-3)">${esc(S.currency)}</span></div>
+            <div class="ysub">${yearY} · ${fmt(ys.rides)} ${ys.rides===1?'ride':'rides'} · ${fmt(ys.buses)} bus</div>
+          </div>
           <div class="yarrows">
             <div class="arrow" onclick="navYear(-1)">‹</div>
             <div class="arrow" onclick="navYear(1)">›</div>
-          </div></div>
-        ${ys.months.map(mm=>{
-          const w=ys.max?Math.max(2,Math.round(mm.total/ys.max*100)):0;
-          const cur=(yearY===vY&&mm.m===vM);
-          return `<div class="ymrow ${mm.total?'':'empty'} ${cur?'cur':''}">
-            <div class="mn">${M[mm.m].slice(0,3)}</div>
-            <div class="track">${mm.total?`<div class="fill" style="width:${w}%;animation-delay:${(mm.m*0.03).toFixed(2)}s"></div>`:''}</div>
-            <div class="vv">${mm.total?mm.total+' '+esc(S.currency):'—'}</div></div>`;
-        }).join('')}
-        <div class="ytot">
-          <div><div class="l">${yearY} total</div>
-            <div class="s">${ys.rides} ${ys.rides===1?'ride':'rides'} · ${ys.buses} bus</div></div>
-          <div class="b">${ys.total} ${esc(S.currency)}</div>
+          </div>
         </div>
+        <div class="chartwrap">
+          <div class="chart">
+            ${ys.months.map(mm=>{
+              const cur=(yearY===vY&&mm.m===vM);
+              const top=ys.max&&mm.total===ys.max;
+              if(!mm.total)return `<div class="col" onclick="goMonth(${yearY},${mm.m})">
+                <div class="yvalue"></div><div class="stub"></div></div>`;
+              const hpx=Math.max(8,Math.round(mm.total/ys.max*(H-26)));
+              return `<div class="col ${top?'top':''}" onclick="goMonth(${yearY},${mm.m})">
+                <div class="yvalue">${fmt(mm.total)}</div>
+                <div class="bar" style="height:${hpx}px;animation-delay:${(mm.m*0.045).toFixed(2)}s;
+                  ${cur?'box-shadow:0 0 0 1.5px rgba(255,255,255,.55);':''}">
+                  ${mm.seg.map(s=>`<div class="seg" style="height:${(s.kr/mm.total*100).toFixed(2)}%;background:${s.color}"></div>`).join('')}
+                </div></div>`;
+            }).join('')}
+          </div>
+          <div class="mlabels">
+            ${ys.months.map(mm=>`<div class="${(yearY===vY&&mm.m===vM)?'cur':''}">${M[mm.m].charAt(0)}</div>`).join('')}
+          </div>
+        </div>
+        <div class="ylegend">
+          ${S.people.map(p=>`<div class="ylrow">
+            <span class="dot" style="background:${p.color};box-shadow:0 0 8px ${p.color}b3"></span>
+            <span class="nm">${esc(p.name||'Unnamed')}</span>
+            <span class="ct">${fmt(ys.byPerson[p.id].rides)} ${ys.byPerson[p.id].rides===1?'ride':'rides'}</span>
+            <span class="vl">${fmt(ys.byPerson[p.id].kr)} ${esc(S.currency)}</span></div>`).join('')}
+          ${S.busEnabled?`<div class="ylrow">
+            <span class="dot" style="background:#BF5AF2;box-shadow:0 0 8px rgba(191,90,242,.7)"></span>
+            <span class="nm">Bus</span>
+            <span class="ct">${fmt(ys.buses)} ${ys.buses===1?'ticket':'tickets'}</span>
+            <span class="vl">${fmt(ys.busKr)} ${esc(S.currency)}</span></div>`:''}
+        </div>
+        ${ys.total?`<div class="ytot">
+          <div><div class="l">Busiest month</div>
+            <div class="s">Tap any column to jump to it</div></div>
+          <div class="b">${M[ys.best.m].slice(0,3)}</div>
+        </div>`:`<div class="ytot"><div><div class="l">Nothing logged in ${yearY}</div>
+          <div class="s">Marked days will show up here</div></div></div>`}
       </div></div>`;
     }
 
@@ -931,8 +1090,8 @@ function render(){
   }
 
   const alert=pend.length?`<div class="alert">
-    <div class="alert-t">Unpaid from earlier months · ${pSum} ${esc(S.currency)}</div>
-    <div class="alert-b">${pend.map(p=>`${esc(p.who)} — ${p.kr} ${esc(S.currency)} from ${p.lab}`).join('<br>')}</div></div>`:'';
+    <div class="alert-t">Unpaid from earlier months · ${fmt(pSum)} ${esc(S.currency)}</div>
+    <div class="alert-b">${pend.map(p=>`${esc(p.who)} — ${fmt(p.kr)} ${esc(S.currency)} from ${p.lab}`).join('<br>')}</div></div>`:'';
 
   root.innerHTML=`<div class="hdr"><div class="navrow"><div>${head}</div>
       <div class="arrows"><div class="arrow" onclick="nav(-1)">‹</div><div class="arrow" onclick="nav(1)">›</div></div>
